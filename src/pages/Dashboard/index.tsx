@@ -21,27 +21,35 @@ import {
   ProductButton,
 } from './styles';
 
-interface Product {
+interface ProductProps {
   id: string;
   title: string;
   image_url: string;
   price: number;
+  formattedPrice: string;
 }
 
 const Dashboard: React.FC = () => {
   const { addToCart } = useCart();
 
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductProps[]>([]);
 
   useEffect(() => {
     async function loadProducts(): Promise<void> {
-      // TODO
+      const response = await api.get<ProductProps[]>('products');
+      const formattedProducts = response.data.map(product => {
+        return {
+          ...product,
+          formattedPrice: formatValue(product.price),
+        };
+      });
+      setProducts(formattedProducts);
     }
 
     loadProducts();
   }, []);
 
-  function handleAddToCart(item: Product): void {
+  function handleAddToCart(item: ProductProps): void {
     // TODO
   }
 
@@ -60,7 +68,7 @@ const Dashboard: React.FC = () => {
               <ProductImage source={{ uri: item.image_url }} />
               <ProductTitle>{item.title}</ProductTitle>
               <PriceContainer>
-                <ProductPrice>{formatValue(item.price)}</ProductPrice>
+                <ProductPrice>{item.formattedPrice}</ProductPrice>
                 <ProductButton
                   testID={`add-to-cart-${item.id}`}
                   onPress={() => handleAddToCart(item)}

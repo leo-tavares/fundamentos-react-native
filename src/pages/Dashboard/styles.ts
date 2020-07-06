@@ -1,11 +1,12 @@
 import styled from 'styled-components/native';
 import { FlatList } from 'react-native';
 
-interface Product {
+interface ProductItemProps {
   id: string;
   title: string;
   image_url: string;
   price: number;
+  formattedPrice: string;
 }
 
 export const Container = styled.SafeAreaView`
@@ -21,7 +22,7 @@ export const ProductContainer = styled.View`
 `;
 
 export const ProductList = styled(
-  FlatList as new () => FlatList<Product>,
+  FlatList as new () => FlatList<ProductItemProps>,
 ).attrs({
   numColumns: 2,
 })`
