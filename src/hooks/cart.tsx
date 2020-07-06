@@ -55,7 +55,11 @@ const CartProvider: React.FC = ({ children }) => {
   }, []);
 
   const increment = useCallback(async id => {
-    // TODO INCREMENTS A PRODUCT QUANTITY IN THE CART
+    setProducts(oldProducts =>
+      oldProducts.map(p =>
+        p.id === id ? { ...p, quantity: p.quantity + 1 } : p,
+      ),
+    );
   }, []);
 
   const decrement = useCallback(async id => {
